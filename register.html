@@ -52,6 +52,9 @@
     button:hover {
         background-color: #0056b3;
     }
+    .error {
+        color: red;
+    }
 </style>
 </head>
 <body>
@@ -90,18 +93,21 @@
 <!--footer-->
 <script>
     function register() {
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        if (username && email && password) {
-            localStorage.setItem('username', username);
-            localStorage.setItem('email', email);
-            localStorage.setItem('password', password);
-            document.getElementById('message').textContent = 'Registro exitoso. Ahora puedes iniciar sesión.';
-        } else {
-            document.getElementById('message').textContent = 'Por favor, completa todos los campos.';
+        const emailInput = document.getElementById('email');
+        const email = emailInput.value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const message = document.getElementById('message');
+        
+        if (!emailPattern.test(email)) {
+            message.textContent = 'Por favor, introduce una dirección de correo electrónico válida.';
+            message.classList.add('error');
+            return false;
         }
+        
+        message.textContent = 'Registro exitoso.';
+        message.classList.remove('error');
+        window.location.href = 'login.html';
+        return true;
     }
 </script>
 </footer>
