@@ -5,7 +5,7 @@ $(function () {
 
     var model;
     var cameraMode = "environment"; // or "user"
-    var confidenceThreshold = 0.30; // Set your confidence threshold here
+    var confidenceThreshold = 0.50; // Set your confidence threshold here
 
     const startVideoStreamPromise = navigator.mediaDevices
         .getUserMedia({
