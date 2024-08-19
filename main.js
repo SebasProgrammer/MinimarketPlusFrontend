@@ -77,20 +77,27 @@ $(function () {
         }
     }
 
-    // Step 1: Enumerate devices and populate the dropdown list
-    navigator.mediaDevices.enumerateDevices().then(function (devices) {
-        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+    // Function to populate the camera selection dropdown
+    function populateCameraList() {
+        cameraSelect.empty(); // Clear the current list
 
-        // Populate the camera selection dropdown
-        videoDevices.forEach((device, index) => {
-            cameraSelect.append(new Option(device.label || `Camera ${index + 1}`, device.deviceId));
+        navigator.mediaDevices.enumerateDevices().then(function (devices) {
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+            // Populate the camera selection dropdown
+            videoDevices.forEach((device, index) => {
+                cameraSelect.append(new Option(device.label || `Camera ${index + 1}`, device.deviceId));
+            });
+
+            // Start with the first camera by default
+            if (videoDevices.length > 0) {
+                startVideoStream(videoDevices[0].deviceId);
+            }
         });
+    }
 
-        // Start with the first camera by default
-        if (videoDevices.length > 0) {
-            startVideoStream(videoDevices[0].deviceId);
-        }
-    });
+    // Step 1: Populate the initial camera list
+    populateCameraList();
 
     // Listen for changes in the camera selection
     cameraSelect.on('change', function () {
@@ -106,6 +113,11 @@ $(function () {
     // Listen for the camera off button click
     cameraOff.on('click', function () {
         stopVideoStream();
+    });
+
+    // Listen for changes in the available devices (e.g., cameras added/removed)
+    navigator.mediaDevices.addEventListener('devicechange', function () {
+        populateCameraList();
     });
 
     // Load the model and start detection
