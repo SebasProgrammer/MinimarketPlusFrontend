@@ -121,10 +121,10 @@ $(function () {
     });
 
     // Load the model and start detection
-    var publishable_key = "rf_piBGXiJtTJUwMWMSR9Dy5g9N1Tv1";
+    var publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1";
     var toLoad = {
-        model: "tesis-vy7o6",
-        version: 4
+        model: "tp2-tkyhk",
+        version: 2
     };
 
     const loadModelPromise = new Promise(function (resolve, reject) {

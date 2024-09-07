@@ -1,38 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>Minimarket Plus</title>
-<meta charset="utf-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="img/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-<meta name="description" content="Your description">
-<meta name="keywords" content="Your keywords">
-<meta name="author" content="Your name">
-<!--CSS-->
-<link rel="stylesheet" href="css/bootstrap.css" >
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/animate.css">
-<link rel="stylesheet" href="fonts/font-awesome.css">
-<!--JS-->
-<script src="js/jquery.js"></script>
-<script src="js/jquery-migrate-1.2.1.min.js"></script>
-<script src="js/jquery.easing.1.3.js"></script>
-<script src="js/jquery.mobilemenu.js"></script>
-<script src="js/jquery.equalheights.js"></script> 
-<script src="js/jquery.ui.totop.js"></script>
-<!--[if (gt IE 9)|!(IE)]><!-->
-<script src="js/wow/wow.js"></script>
-<script src="js/wow/device.min.js"></script>
-<script>
-    $(document).ready(function () {       
-      if ($('html').hasClass('desktop')) {
-        new WOW().init();
-      }   
-    });
-</script>
-<style>
-    input {
+    <title>Minimarket Plus</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <meta name="description" content="Your description">
+    <meta name="keywords" content="Your keywords">
+    <meta name="author" content="Your name">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="fonts/font-awesome.css">
+    <!-- JS -->
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.mobilemenu.js"></script>
+    <script src="js/jquery.equalheights.js"></script>
+    <script src="js/jquery.ui.totop.js"></script>
+    <script src="js/wow/wow.js"></script>
+    <script src="js/wow/device.min.js"></script>
+    <style>
+        input {
             display: block;
             width: 100%;
             padding: 10px;
@@ -40,27 +32,30 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-    button {
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #0056b3;
-    }
-    .error {
-        color: red;
-    }
-</style>
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <!--header-->
 <header>
-    <div class="container">     
+    <div class="container">
         <nav class="navbar navbar-default navbar-static-top tm_navbar clearfix" role="navigation">
             <ul class="nav sf-menu clearfix">
                 <li><a href="index.html">Inicio</a><em></em></li>
@@ -68,7 +63,7 @@
                 <li><a href="login.html">Iniciar Sesión</a><em></em></li>
                 <li><a href="register.html">Registrarse</a></li>
             </ul>
-        </nav> 
+        </nav>
     </div>
 </header>
 <div class="thumb-box10">
@@ -76,13 +71,14 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 errorBox wow fadeInUp">
-                <figure><img src="img/maxresdefault.jpg" alt="" style="width: 100%; height: 100%"></figure>
+                <figure><img src="img/maxresdefault.jpg" alt="Registration Image" style="width: 100%; height: 100%;"></figure>
             </div>
             <div class="col-lg-5 col-md-6 col-sm-6 errorBox1 wow fadeInUp" data-wow-delay="0.1s">
                 <h2>Registro</h2>
-                <input type="text" id="username" placeholder="Nombre de usuario" required>
-                <input type="email" id="email" placeholder="Correo electrónico" required>
-                <input type="password" id="password" placeholder="Contraseña" required>
+                <input type="text" id="username" placeholder="Nombre de usuario" required minlength="4" maxlength="20"
+                       autocomplete="off">
+                <input type="email" id="email" placeholder="Correo electrónico" required autocomplete="off">
+                <input type="password" id="password" placeholder="Contraseña" required minlength="8" autocomplete="off">
                 <button onclick="register()">Registrarse</button>
                 <p id="message"></p>
             </div>
@@ -92,37 +88,73 @@
 </div>
 <!--footer-->
 <script>
-    function register() {
-        
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+    function sanitizeInput(input) {
+        // Sanitize input to prevent XSS
+        const element = document.createElement('div');
+        element.innerText = input;
+        return element.innerHTML;
+    }
 
-        if (username && email && password) {
-            localStorage.setItem('username', username);
-            localStorage.setItem('email', email);
-            localStorage.setItem('password', password);
-            document.getElementById('message').textContent = 'Registro exitoso. Ahora puedes iniciar sesión.';
-        } else {
-            document.getElementById('message').textContent = 'Por favor, completa todos los campos.';
-        }
-        
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    function register() {
+        const username = sanitizeInput(document.getElementById('username').value.trim());
+        const email = sanitizeInput(document.getElementById('email').value.trim());
+        const password = document.getElementById('password').value.trim(); // Do not sanitize passwords
         const message = document.getElementById('message');
-        
+
+        // Clear previous messages
+        message.textContent = '';
+        message.classList.remove('error');
+
+        // Validation checks
+        if (!username || !email || !password) {
+            message.textContent = 'Por favor, completa todos los campos.';
+            message.classList.add('error');
+            return;
+        }
+
+        // Email validation pattern
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
             message.textContent = 'Por favor, introduce una dirección de correo electrónico válida.';
             message.classList.add('error');
-            return false;
+            return;
         }
-        
-        message.textContent = 'Registro exitoso.';
-        message.classList.remove('error');
-        window.location.href = 'login.html';
-        return true;
+
+        // Password strength check (customize as needed)
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordPattern.test(password)) {
+            message.textContent = 'La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y símbolos.';
+            message.classList.add('error');
+            return;
+        }
+
+        // Send data to the server (replace with actual server communication)
+        fetch('https://minimarketserver.onrender.com/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password })
+        })
+            .then(response => {
+                if (response.ok) {
+                    message.textContent = 'Registro exitoso. Ahora puedes iniciar sesión.';
+                    message.classList.remove('error');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1000);
+                } else {
+                    message.textContent = 'Error en el registro. Inténtalo de nuevo.';
+                    message.classList.add('error');
+                }
+            })
+            .catch(error => {
+                message.textContent = 'Error en la conexión. Inténtalo más tarde.';
+                message.classList.add('error');
+                console.error('Error:', error);
+            });
     }
 </script>
-</footer>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/tm-scripts.js"></script>
 </body>

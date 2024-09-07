@@ -1,38 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>Minimarket Plus</title>
-<meta charset="utf-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="img/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-<meta name="description" content="Your description">
-<meta name="keywords" content="Your keywords">
-<meta name="author" content="Your name">
-<!--CSS-->
-<link rel="stylesheet" href="css/bootstrap.css" >
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/animate.css">
-<link rel="stylesheet" href="fonts/font-awesome.css">
-<!--JS-->
-<script src="js/jquery.js"></script>
-<script src="js/jquery-migrate-1.2.1.min.js"></script>
-<script src="js/jquery.easing.1.3.js"></script>
-<script src="js/jquery.mobilemenu.js"></script>
-<script src="js/jquery.equalheights.js"></script> 
-<script src="js/jquery.ui.totop.js"></script>
-<!--[if (gt IE 9)|!(IE)]><!-->
-<script src="js/wow/wow.js"></script>
-<script src="js/wow/device.min.js"></script>
-<script>
-    $(document).ready(function () {       
-      if ($('html').hasClass('desktop')) {
-        new WOW().init();
-      }   
-    });
-</script>
-<style>
-    input {
+    <title>Minimarket Plus</title>
+    <meta charset="utf-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Your description">
+    <meta name="keywords" content="Your keywords">
+    <meta name="author" content="Your name">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="fonts/font-awesome.css">
+    <!-- JS -->
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.mobilemenu.js"></script>
+    <script src="js/jquery.equalheights.js"></script>
+    <script src="js/jquery.ui.totop.js"></script>
+    <script src="js/wow/wow.js"></script>
+    <script src="js/wow/device.min.js"></script>
+    <style>
+        input {
             display: block;
             width: 100%;
             padding: 10px;
@@ -40,19 +32,25 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-    button {
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #0056b3;
-    }
-</style>
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <!--header-->
@@ -88,23 +86,50 @@
 </div>
 <!--footer-->
 <script>
-    function login() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+    async function login() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const message = document.getElementById('message');
 
-        const storedUsername = localStorage.getItem('username');
-        const storedPassword = localStorage.getItem('password');
+        // Clear previous messages
+        message.textContent = '';
+        message.classList.remove('error');
 
-        if (username === storedUsername && password === storedPassword) {
-            document.getElementById('message').textContent = 'Inicio de sesión exitoso.';
-            // Redirigir a otra página
-            window.location.href = 'demo.html'; // Reemplaza con la URL deseada
-        } else {
-            document.getElementById('message').textContent = 'Nombre de usuario o contraseña incorrectos.';
+        // Validation checks
+        if (!username || !password) {
+            message.textContent = 'Por favor, completa todos los campos.';
+            message.classList.add('error');
+            return;
+        }
+
+        try {
+            // Send data to the server
+            const response = await fetch('https://minimarketserver.onrender.com/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                message.textContent = 'Inicio de sesión exitoso.';
+                message.classList.remove('error');
+                // Redirect to another page
+                window.location.href = 'demo.html'; // Reemplaza con la URL deseada
+            } else {
+                message.textContent = result.message || 'Nombre de usuario o contraseña incorrectos.';
+                message.classList.add('error');
+            }
+        } catch (error) {
+            message.textContent = 'Error en la conexión. Inténtalo más tarde.';
+            message.classList.add('error');
+            console.error('Error:', error);
         }
     }
 </script>
-</footer>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/tm-scripts.js"></script>
 </body>
