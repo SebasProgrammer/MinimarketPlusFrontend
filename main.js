@@ -47,7 +47,7 @@ $(function () {
         const constraints = {
             audio: false,
             video: {
-                facingMode: "user", // Default to front-facing camera
+                facingMode: "environment", // Default to front-facing camera
                 deviceId: deviceId ? { exact: deviceId } : undefined,
             },
         };
