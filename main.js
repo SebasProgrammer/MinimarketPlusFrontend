@@ -73,26 +73,28 @@ $(document).ready(function () {
 
             selectedDeviceId = videoDevices[0]?.deviceId;
             if (selectedDeviceId) {
-                startVideoStream(selectedDeviceId);
+                await startVideoStream(selectedDeviceId);
             }
         } catch (error) {
             console.error("Error enumerating devices:", error);
         }
     };
 
-    const loadModel = () => {
-        return roboflow.auth({ publishable_key: publishable_key }).load(toLoad);
-    };
-
-    const startApp = async () => {
+    const loadModel = async () => {
         try {
-            model = await loadModel();
-            $("body").removeClass("loading");
-            resizeCanvas();
-            detectFrame();
+            const m = await roboflow.auth({ publishable_key: publishable_key }).load(toLoad);
+            model = m;
         } catch (error) {
             console.error("Error loading model:", error);
         }
+    };
+
+    const startApp = async () => {
+        await populateCameraList();
+        await loadModel();
+        $("body").removeClass("loading");
+        resizeCanvas();
+        detectFrame();
     };
 
     const resizeCanvas = () => {
@@ -234,12 +236,12 @@ $(document).ready(function () {
                 console.error("Error starting camera:", error);
             }
         } else if (selectedValue === 'off') {
-            stopVideoStream();
+            await stopVideoStream();
         }
     });
 
     // Initialize app
-    populateCameraList().then(startApp).catch((error) => {
+    startApp().catch((error) => {
         console.error("Error during initialization:", error);
     });
 });
