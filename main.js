@@ -33,6 +33,15 @@ $(function () {
         return product ? product.price : 0;
     };
 
+    // Function to check if current time in Lima is past 11 PM
+    const isPast11PMInLima = () => {
+        const now = new Date();
+        const options = { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hour12: false };
+        const time = new Intl.DateTimeFormat('es-PE', options).format(now);
+        const [hour] = time.split(':').map(Number);
+        return hour >= 23 && hour<=7;
+    };
+
     // Function to start the video stream based on the selected camera
     const startVideoStream = (deviceId) => {
         const constraints = {
@@ -57,7 +66,6 @@ $(function () {
             .catch((error) => console.error("Error accessing media devices:", error));
     };
     
-
     const populateCameraList = async () => {
         try {
             const devices = await navigator.mediaDevices.enumerateDevices();
@@ -162,6 +170,12 @@ $(function () {
 
         predictions.forEach(function (prediction) {
             if (prediction.confidence >= confidenceThreshold) {
+                // Skip Heineken if it's past 11 PM in Lima
+                if (prediction.class.toLowerCase() === 'heineken' && isPast11PMInLima()) {
+                    alert("Desde las 11 PM ya no se puede consumir bebidas alcohólicas.");
+                    return; // Skip this product
+                }
+
                 const x = prediction.bbox.x;
                 const y = prediction.bbox.y;
                 const width = prediction.bbox.width;
