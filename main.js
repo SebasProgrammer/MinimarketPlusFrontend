@@ -4,6 +4,7 @@ $(document).ready(function () {
     let currentStream = null;
     let selectedDeviceId = null;
     const confidenceThreshold = 0.65;
+    const font = "16px sans-serif"; // Definir la fuente aquí
 
     const publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1"; // Store securely in environment variables or backend
     const toLoad = {
@@ -97,6 +98,24 @@ $(document).ready(function () {
         detectFrame();
     };
 
+    const videoDimensions = (video) => {
+        const videoRatio = video.videoWidth / video.videoHeight;
+        let width = video.offsetWidth;
+        let height = video.offsetHeight;
+        const elementRatio = width / height;
+
+        if (elementRatio > videoRatio) {
+            width = height * videoRatio;
+        } else {
+            height = width / videoRatio;
+        }
+
+        return {
+            width: width,
+            height: height
+        };
+    };
+
     const resizeCanvas = () => {
         $("canvas").remove();
         const canvas = $("<canvas/>");
@@ -119,7 +138,6 @@ $(document).ready(function () {
     const renderPredictions = (predictions) => {
         const dimensions = videoDimensions(video);
         const scale = 1;
-
         const ctx = $("canvas")[0].getContext("2d");
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         $("#productList").empty();
