@@ -38,14 +38,15 @@ $(function () {
         const constraints = {
             audio: false,
             video: {
+                facingMode: "user", // Default to front-facing camera
                 deviceId: deviceId ? { exact: deviceId } : undefined,
             },
         };
-
+    
         if (currentStream) {
             currentStream.getTracks().forEach((track) => track.stop());
         }
-
+    
         navigator.mediaDevices
             .getUserMedia(constraints)
             .then((stream) => {
@@ -53,32 +54,31 @@ $(function () {
                 currentStream = stream;
                 video.play();
             })
-            .catch((error) => console.error("Error accessing media devices.", error));
+            .catch((error) => console.error("Error accessing media devices:", error));
     };
+    
 
-    // Function to populate the camera list
-    const populateCameraList = () => {
-        navigator.mediaDevices
-            .enumerateDevices()
-            .then((devices) => {
-                const videoDevices = devices.filter((device) => device.kind === "videoinput");
-                const cameraSelect = $("#cameraDropdown");
-                cameraSelect.empty();
+    const populateCameraList = async () => {
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter((device) => device.kind === "videoinput");
+            const cameraSelect = $("#cameraDropdown");
+            cameraSelect.empty();
 
-                videoDevices.forEach((device) => {
-                    // Use the actual device label if available
-                    const option = new Option(device.label, device.deviceId);
-                    cameraSelect.append(option);
-                });
+            videoDevices.forEach((device) => {
+                const option = new Option(device.label || "Unnamed Camera", device.deviceId);
+                cameraSelect.append(option);
+            });
 
-                // Set the first available device as the default
-                selectedDeviceId = videoDevices[0]?.deviceId;
+            selectedDeviceId = videoDevices[0]?.deviceId;
+            if (selectedDeviceId) {
                 startVideoStream(selectedDeviceId);
-            })
-            .catch((error) => console.error("Error enumerating devices:", error));
+            }
+        } catch (error) {
+            console.error("Error enumerating devices:", error);
+        }
     };
 
-    // Handle camera selection change
     $("#cameraDropdown").on("change", function () {
         selectedDeviceId = $(this).val();
         startVideoStream(selectedDeviceId);
@@ -237,4 +237,50 @@ $(function () {
                 requestAnimationFrame(detectFrame);
             });
     };
+
+    async function stopVideoStream() {
+        if (currentStream) {
+            currentStream.getTracks().forEach((track) => track.stop());
+            currentStream = null;
+        }
+        video.srcObject = null;
+    }
+
+    async function startVideoStreamAsync() {
+        const constraints = {
+            audio: false,
+            video: {
+                facingMode: "user",
+            },
+        };
+
+        if (currentStream) {
+            currentStream.getTracks().forEach((track) => track.stop());
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = stream;
+            currentStream = stream;
+            video.play();
+        } catch (error) {
+            console.error("Error accessing media devices:", error);
+        }
+    }
+
+    $('#cameraSelectBox').on('change', async function() {
+        const selectedValue = $(this).val();
+        
+        if (selectedValue === 'on') {
+            console.log("Cámara Prendida");
+            try {
+                await startVideoStreamAsync(); // Usa async/await para manejar operaciones asíncronas
+            } catch (error) {
+                console.error("Error al iniciar la cámara:", error);
+            }
+        } else if (selectedValue === 'off') {
+            console.log("Cámara Apagada");
+            stopVideoStream(); // Puede ser síncrono si no involucra operaciones que llevan tiempo
+        }
+    });
 });

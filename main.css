@@ -116,6 +116,7 @@ body:after {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
 #leftSidebar h2 {
@@ -135,3 +136,52 @@ body:after {
     text-align: center;
 }
 
+/* Estilo general para el select */
+#cameraSelectBox {
+    width: 200px; /* Ancho del select */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #fff; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo blanco */
+    font-size: 16px; /* Tamaño de fuente */
+    color: white; /* Color de texto */
+    cursor: pointer; /* Cursor en forma de mano al pasar por encima */
+    transition: all 0.3s ease; /* Transición suave para cambios de estilo */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo para el select cuando está en foco */
+#cameraSelectBox:focus {
+    border-color: #007bff; /* Borde azul al estar en foco */
+    outline: none; /* Eliminar el contorno predeterminado */
+}
+
+/* Estilo para las opciones del select */
+#cameraSelectBox option {
+    padding: 10px; /* Espaciado interno de las opciones */
+    background-color: #333; /* Fondo blanco para opciones */
+    color: #fff; /* Color de texto para opciones */
+}
+
+/* Estilo para las opciones seleccionadas */
+#cameraSelectBox option:checked {
+    background-color: #007bff; /* Fondo azul para opción seleccionada */
+    color: #fff; /* Texto blanco para opción seleccionada */
+}
+
+/* Estilo general para el contenedor del select */
+.select-container {
+    display: inline-block;
+    position: relative;
+    font-family: Arial, sans-serif; /* Fuente moderna */
+    margin-top: 20px;
+}
+
+/* Estilo para la etiqueta del select */
+.select-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold; /* Negrita para la etiqueta */
+    color: white; /* Color de texto de la etiqueta */
+    margin-bottom: 10px;
+}
