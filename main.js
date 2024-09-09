@@ -1,39 +1,93 @@
-/*jshint esversion:6*/
-
 $(function () {
     const video = $("video")[0];
-    var model;
-    var cameraMode = "environment"; // or "user"
-    var confidenceThreshold = 0.65; // Set the confidence threshold here (0 to 1)
+    let model;
+    let currentStream = null;
+    let selectedDeviceId = null;
+    const confidenceThreshold = 0.65; // Set the confidence threshold here (0 to 1)
 
-    const startVideoStreamPromise = navigator.mediaDevices
-        .getUserMedia({
-            audio: false,
-            video: {
-                facingMode: cameraMode
-            }
-        })
-        .then(function (stream) {
-            return new Promise(function (resolve) {
-                video.srcObject = stream;
-                video.onloadeddata = function () {
-                    video.play();
-                    resolve();
-                };
-            });
-        });
-
-    var publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1";
-    var toLoad = {
+    const publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1";
+    const toLoad = {
         model: "tp2-tkyhk",
-        version: 6
+        version: 6,
     };
 
+    // Products data
+    const products = [
+        { id: 1, name: "Halls", price: 2.0 },
+        { id: 2, name: "Heineken", price: 6.0 },
+        { id: 3, name: "Incakola", price: 3.0 },
+        { id: 4, name: "Lays", price: 3.0 },
+        { id: 5, name: "Monster", price: 8.40 },
+        { id: 6, name: "Redbull", price: 8.90 },
+        { id: 7, name: "Snickers", price: 5.30 },
+        { id: 8, name: "Sprite", price: 2.70 },
+        { id: 9, name: "Trident", price: 1.90 },
+        { id: 10, name: "Pringles", price: 10.90 }
+    ];
+
+    // Function to get product price by name
+    const getProductPrice = (name) => {
+        console.log(`Looking up price for: ${name}`);
+        const product = products.find(p => p.name.toLowerCase() === name.toLowerCase());
+        console.log(`Found product: ${product}`);
+        return product ? product.price : 0;
+    };
+
+    // Function to start the video stream based on the selected camera
+    const startVideoStream = (deviceId) => {
+        const constraints = {
+            audio: false,
+            video: {
+                deviceId: deviceId ? { exact: deviceId } : undefined,
+            },
+        };
+
+        if (currentStream) {
+            currentStream.getTracks().forEach((track) => track.stop());
+        }
+
+        navigator.mediaDevices
+            .getUserMedia(constraints)
+            .then((stream) => {
+                video.srcObject = stream;
+                currentStream = stream;
+                video.play();
+            })
+            .catch((error) => console.error("Error accessing media devices.", error));
+    };
+
+    // Function to populate the camera list
+    const populateCameraList = () => {
+        navigator.mediaDevices
+            .enumerateDevices()
+            .then((devices) => {
+                const videoDevices = devices.filter((device) => device.kind === "videoinput");
+                const cameraSelect = $("#cameraDropdown");
+                cameraSelect.empty();
+
+                videoDevices.forEach((device) => {
+                    // Use the actual device label if available
+                    const option = new Option(device.label, device.deviceId);
+                    cameraSelect.append(option);
+                });
+
+                // Set the first available device as the default
+                selectedDeviceId = videoDevices[0]?.deviceId;
+                startVideoStream(selectedDeviceId);
+            })
+            .catch((error) => console.error("Error enumerating devices:", error));
+    };
+
+    // Handle camera selection change
+    $("#cameraDropdown").on("change", function () {
+        selectedDeviceId = $(this).val();
+        startVideoStream(selectedDeviceId);
+    });
+
+    // Load the Roboflow model
     const loadModelPromise = new Promise(function (resolve, reject) {
         roboflow
-            .auth({
-                publishable_key: publishable_key
-            })
+            .auth({ publishable_key: publishable_key })
             .load(toLoad)
             .then(function (m) {
                 model = m;
@@ -41,37 +95,35 @@ $(function () {
             });
     });
 
-    Promise.all([startVideoStreamPromise, loadModelPromise]).then(function () {
+    // Start video stream and load the model
+    Promise.all([loadModelPromise]).then(function () {
         $("body").removeClass("loading");
         resizeCanvas();
         detectFrame();
     });
 
-    var canvas, ctx;
+    // Populate camera list on page load
+    populateCameraList();
+
+    // Resize and manage canvas rendering
+    let canvas, ctx;
     const font = "16px sans-serif";
 
     function videoDimensions(video) {
-        // Ratio of the video's intrinsic dimensions
-        var videoRatio = video.videoWidth / video.videoHeight;
-
-        // The width and height of the video element
-        var width = video.offsetWidth,
+        const videoRatio = video.videoWidth / video.videoHeight;
+        let width = video.offsetWidth,
             height = video.offsetHeight;
+        const elementRatio = width / height;
 
-        // The ratio of the element's width to its height
-        var elementRatio = width / height;
-
-        // If the video element is short and wide
         if (elementRatio > videoRatio) {
             width = height * videoRatio;
         } else {
-            // It must be tall and thin, or exactly equal to the original ratio
             height = width / videoRatio;
         }
 
         return {
             width: width,
-            height: height
+            height: height,
         };
     }
 
@@ -84,15 +136,7 @@ $(function () {
         canvas = $("<canvas/>");
         ctx = canvas[0].getContext("2d");
 
-        var dimensions = videoDimensions(video);
-        console.log(
-            video.videoWidth,
-            video.videoHeight,
-            video.offsetWidth,
-            video.offsetHeight,
-            dimensions
-        );
-
+        const dimensions = videoDimensions(video);
         canvas[0].width = video.videoWidth;
         canvas[0].height = video.videoHeight;
 
@@ -100,19 +144,22 @@ $(function () {
             width: dimensions.width,
             height: dimensions.height,
             left: ($(window).width() - dimensions.width) / 2,
-            top: ($(window).height() - dimensions.height) / 2
+            top: ($(window).height() - dimensions.height) / 2,
         });
 
         $("body").append(canvas);
     };
 
     const renderPredictions = function (predictions) {
-        var dimensions = videoDimensions(video);
-        var scale = 1;
+        const dimensions = videoDimensions(video);
+        const scale = 1;
 
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        // Filter predictions based on confidence threshold
+        // Clear and update the sidebar
+        $("#productList").empty();
+        let totalPrice = 0;
+
         predictions.forEach(function (prediction) {
             if (prediction.confidence >= confidenceThreshold) {
                 const x = prediction.bbox.x;
@@ -120,7 +167,6 @@ $(function () {
                 const width = prediction.bbox.width;
                 const height = prediction.bbox.height;
 
-                // Draw the bounding box.
                 ctx.strokeStyle = prediction.color;
                 ctx.lineWidth = 4;
                 ctx.strokeRect(
@@ -130,27 +176,26 @@ $(function () {
                     height / scale
                 );
 
-                // Draw the label background.
                 ctx.fillStyle = prediction.color;
                 const textWidth = ctx.measureText(prediction.class).width;
-                const textHeight = parseInt(font, 10); // base 10
+                const textHeight = parseInt(font, 10);
                 ctx.fillRect(
                     (x - width / 2) / scale,
                     (y - height / 2) / scale,
                     textWidth + 8,
                     textHeight + 4
                 );
-            }
-        });
 
-        predictions.forEach(function (prediction) {
-            if (prediction.confidence >= confidenceThreshold) {
-                const x = prediction.bbox.x;
-                const y = prediction.bbox.y;
-                const width = prediction.bbox.width;
-                const height = prediction.bbox.height;
+                // Get product price by name
+                const price = getProductPrice(prediction.class);
+                console.log(`Detected ${prediction.class} with price ${price}`);
+                totalPrice += price;
 
-                // Draw the text last to ensure it's on top.
+                // Add product to sidebar
+                if (price > 0) {
+                    $("#productList").append(`<li>${prediction.class}: $${price.toFixed(2)}</li>`);
+                }
+
                 ctx.font = font;
                 ctx.textBaseline = "top";
                 ctx.fillStyle = "#000000";
@@ -161,10 +206,13 @@ $(function () {
                 );
             }
         });
+
+        // Update total price
+        $("#totalPrice").text(`Precio Total: $${totalPrice.toFixed(2)}`);
     };
 
-    var prevTime;
-    var pastFrameTimes = [];
+    let prevTime;
+    const pastFrameTimes = [];
     const detectFrame = function () {
         if (!model) return requestAnimationFrame(detectFrame);
 
@@ -178,12 +226,8 @@ $(function () {
                     pastFrameTimes.push(Date.now() - prevTime);
                     if (pastFrameTimes.length > 30) pastFrameTimes.shift();
 
-                    var total = 0;
-                    _.each(pastFrameTimes, function (t) {
-                        total += t / 1000;
-                    });
-
-                    var fps = pastFrameTimes.length / total;
+                    const total = pastFrameTimes.reduce((sum, t) => sum + t / 1000, 0);
+                    const fps = pastFrameTimes.length / total;
                     $("#fps").text(Math.round(fps));
                 }
                 prevTime = Date.now();

@@ -79,6 +79,17 @@
                        autocomplete="off">
                 <input type="email" id="email" placeholder="Correo electrónico" required autocomplete="off">
                 <input type="password" id="password" placeholder="Contraseña" required minlength="8" autocomplete="off">
+
+                    <!-- Password Requirements -->
+                <div class="password-requirements">
+                    <ul>
+                        <li><i class="fa fa-check"></i> Al menos 8 caracteres</li>
+                        <li><i class="fa fa-check"></i> Una letra mayúscula</li>
+                        <li><i class="fa fa-check"></i> Una letra minúscula</li>
+                        <li><i class="fa fa-check"></i> Un número</li>
+                        <li><i class="fa fa-check"></i> Un símbolo especial</li>
+                    </ul>
+                </div>
                 <button onclick="register()">Registrarse</button>
                 <p id="message"></p>
             </div>
