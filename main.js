@@ -3,7 +3,7 @@ $(document).ready(function () {
     let model;
     let currentStream = null;
     let selectedDeviceId = null;
-    const confidenceThreshold = 0.65;
+    const confidenceThreshold = 0.70;
     const font = "16px sans-serif"; // Definir la fuente aquí
 
     const publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1"; // Store securely in environment variables or backend
