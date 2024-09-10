@@ -3,8 +3,8 @@ $(document).ready(function () {
     let model;
     let currentStream = null;
     let selectedDeviceId = null;
-    const confidenceThreshold = 0.70;
-    const font = "16px sans-serif"; // Definir la fuente aquí
+    const confidenceThreshold = 0.65;
+    const font = "16px sans-serif"; // Define font here
 
     const publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1"; // Store securely in environment variables or backend
     const toLoad = {
@@ -56,6 +56,7 @@ $(document).ready(function () {
             currentStream = stream;
             video.play();
         } catch (error) {
+            alert("Error accessing camera. Please make sure camera access is allowed.");
             console.error("Error accessing media devices:", error);
         }
     };
@@ -77,6 +78,7 @@ $(document).ready(function () {
                 await startVideoStream(selectedDeviceId);
             }
         } catch (error) {
+            alert("Error enumerating devices. Please check camera permissions.");
             console.error("Error enumerating devices:", error);
         }
     };
@@ -86,6 +88,7 @@ $(document).ready(function () {
             const m = await roboflow.auth({ publishable_key: publishable_key }).load(toLoad);
             model = m;
         } catch (error) {
+            alert("Error loading model. Please try again later.");
             console.error("Error loading model:", error);
         }
     };
