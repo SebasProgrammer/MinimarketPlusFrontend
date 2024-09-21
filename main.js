@@ -94,11 +94,29 @@ $(document).ready(function () {
     };
 
     const startApp = async () => {
-        await populateCameraList();
-        await loadModel();
-        $("body").removeClass("loading");
-        resizeCanvas();
-        detectFrame();
+        try {
+            await requestCameraPermission();
+            await populateCameraList();
+            await loadModel();
+            $("body").removeClass("loading");
+            resizeCanvas();
+            detectFrame();
+        } catch (error) {
+            console.error("Error starting app:", error);
+            alert("Error starting the app. Please check your camera permissions and try again.");
+        }
+    };
+
+    const requestCameraPermission = async () => {
+        try {
+            await navigator.mediaDevices.getUserMedia({ video: true });
+            // Permission granted, stop this stream as we'll start a new one later
+            const tracks = await navigator.mediaDevices.getUserMedia({ video: true });
+            tracks.getTracks().forEach(track => track.stop());
+        } catch (error) {
+            console.error("Error requesting camera permission:", error);
+            throw new Error("Camera permission denied");
+        }
     };
 
     const videoDimensions = (video) => {
