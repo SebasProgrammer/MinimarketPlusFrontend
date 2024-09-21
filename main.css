@@ -185,3 +185,40 @@ body:after {
     color: white; /* Color de texto de la etiqueta */
     margin-bottom: 10px;
 }
+
+/* Estilo para el contenedor del ícono circular */
+.logout-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Ajusta el tamaño */
+    height: 50px; /* Mantén el mismo valor para ancho y alto para hacerlo circular */
+    background-color: #ff4d4d;
+    border-radius: 50%; /* Esto lo hace circular */
+    cursor: pointer;
+    margin-top: 20px; /* Separación del contenido anterior */
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo para el ícono */
+.logout-icon i {
+    color: white;
+    font-size: 24px; /* Tamaño del ícono */
+}
+
+/* Efecto hover */
+.logout-icon:hover {
+    background-color: #cc0000;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .logout-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logout-icon i {
+        font-size: 20px;
+    }
+}

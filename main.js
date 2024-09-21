@@ -261,6 +261,12 @@ $(document).ready(function () {
         }
     });
 
+    document.getElementById('logoutIcon').addEventListener('click', function () {
+        // Aquí puedes agregar la lógica para cerrar sesión o redirigir al login
+        // Por ejemplo, redirigir a una página de login
+        window.location.href = 'login.html';
+    });
+
     // Initialize app
     startApp().catch((error) => {
         console.error("Error during initialization:", error);

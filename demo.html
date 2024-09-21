@@ -15,6 +15,8 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
     <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 
 <body class="loading">
@@ -40,12 +42,16 @@
 
     <!-- Sidebar HTML -->
     <div id="rightSidebar">
+        <div id="logoutIcon" class="logout-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <br>
         <h2>Productos Detectados</h2>
         <ul id="productList"></ul>
         <div id="totalPrice">Precio Total: $0.00</div>
+        <!-- Botón para cerrar sesión -->
     </div>
 
     <script src="./main.js"></script>
 </body>
-
 </html>
