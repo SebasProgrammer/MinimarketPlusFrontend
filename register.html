@@ -78,12 +78,12 @@
                 <input type="text" id="username" placeholder="Nombre de usuario" required minlength="4" maxlength="20"
                        autocomplete="off">
                 <input type="email" id="email" placeholder="Correo electrónico" required autocomplete="off">
-                <input type="password" id="password" placeholder="Contraseña" required minlength="8" autocomplete="off">
+                <input type="password" id="password" placeholder="Contraseña" required minlength="8" maxlength="16" autocomplete="off">
 
                     <!-- Password Requirements -->
                 <div class="password-requirements">
                     <ul>
-                        <li><i class="fa fa-check"></i> Al menos 8 caracteres</li>
+                        <li><i class="fa fa-check"></i> Entre 8 y 16 caracteres</li>
                         <li><i class="fa fa-check"></i> Una letra mayúscula</li>
                         <li><i class="fa fa-check"></i> Una letra minúscula</li>
                         <li><i class="fa fa-check"></i> Un número</li>
@@ -134,7 +134,13 @@
         // Password strength check (customize as needed)
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         if (!passwordPattern.test(password)) {
-            message.textContent = 'La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y símbolos.';
+            message.textContent = 'La contraseña debe tener entre 8 y 16 caracteres, incluyendo mayúsculas, minúsculas, números y símbolos.';
+            message.classList.add('error');
+            return;
+        }
+
+        if (password.length > 16) {
+            message.textContent = 'La contraseña no debe exceder los 16 caracteres.';
             message.classList.add('error');
             return;
         }
