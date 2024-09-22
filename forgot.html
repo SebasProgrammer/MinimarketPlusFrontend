@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Recuperar Contraseña - Minimarket Plus</title>
+    <meta charset="utf-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Recuperar contraseña">
+    <meta name="keywords" content="recuperar, contraseña, minimarket">
+    <meta name="author" content="Your name">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="fonts/font-awesome.css">
+    <style>
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">     
+        <nav class="navbar navbar-default navbar-static-top tm_navbar clearfix" role="navigation">
+            <ul class="nav sf-menu clearfix">
+                <li><a href="index.html">Inicio</a><em></em></li>
+                <li><a href="informacion.html">Nosotros</a><em></em></li>
+                <li><a href="login.html">Iniciar Sesión</a><em></em></li>
+                <li><a href="register.html">Registrarse</a></li>
+            </ul>
+        </nav> 
+    </div>
+</header>
+<div class="thumb-box10">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 errorBox wow fadeInUp">
+                <figure><img src="img/maxresdefault.jpg" alt="" style="width: 100%; height: 100%"></figure>
+            </div>
+            <div class="col-lg-5 col-md-6 col-sm-6 errorBox1 wow fadeInUp" data-wow-delay="0.1s">
+                <h2>Recuperar Contraseña</h2>
+                <input type="email" id="email" placeholder="Correo electrónico" required>
+                <button onclick="resetPassword()">Enviar enlace de recuperación</button>
+                <p id="message"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    async function resetPassword() {
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message');
+
+        message.textContent = '';
+        message.classList.remove('error', 'success');
+
+        if (!email) {
+            message.textContent = 'Por favor, ingresa tu correo electrónico.';
+            message.classList.add('error');
+            return;
+        }
+
+        try {
+            const response = await fetch('https://minimarketserver.onrender.com/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                message.textContent = 'Se ha enviado un enlace de recuperación a tu correo electrónico.';
+                message.classList.add('success');
+            } else {
+                message.textContent = result.message || 'Error al procesar la solicitud. Inténtalo más tarde.';
+                message.classList.add('error');
+            }
+        } catch (error) {
+            message.textContent = 'Error en la conexión. Inténtalo más tarde.';
+            message.classList.add('error');
+            console.error('Error:', error);
+        }
+    }
+</script>
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/tm-scripts.js"></script>
+</body>
+</html>
