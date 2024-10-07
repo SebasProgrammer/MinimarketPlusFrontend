@@ -9,7 +9,7 @@ $(document).ready(function () {
     const publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1"; // Store securely in environment variables or backend
     const toLoad = {
         model: "tp2-tkyhk",
-        version: 16,
+        version: 17,
     };
 
     const products = [
