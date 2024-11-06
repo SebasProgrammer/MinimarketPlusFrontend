@@ -211,6 +211,75 @@ body:after {
     background-color: #cc0000;
 }
 
+#payButtonContainer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#payButton {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#payButton:hover {
+    background-color: #218838;
+}
+
+#paymentConfirmation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+#confirmationImage {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+}
+
+#backToStreamButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #ff4d4d;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 20;
+}
+
+#bbackToStreamButton:hover {
+    background-color: #cc0000;
+}
+
+#backToStreamButton i {
+    font-size: 30px; /* Tamaño del ícono */
+}
+
+/* Estilo para el precio cuando está congelado */
+#totalPrice.frozen {
+    font-weight: bold; /* Hace el texto en negrita */
+    color: #e60000; /* Cambia el color a un rojo más fuerte o puedes elegir el color que prefieras */
+    font-size: 20px; /* Aumenta el tamaño de la fuente */
+}
+
 /* Ajustes para pantallas pequeñas */
 @media (max-width: 768px) {
     .logout-icon {
@@ -222,3 +291,4 @@ body:after {
         font-size: 20px;
     }
 }
+

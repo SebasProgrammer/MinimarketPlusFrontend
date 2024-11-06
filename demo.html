@@ -16,6 +16,7 @@
     <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
     <link rel="stylesheet" href="./main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
 </head>
 
 <body class="loading">
@@ -64,6 +65,15 @@
     <h2>Productos Detectados</h2>
     <ul id="productList"></ul>
     <div id="totalPrice">Precio Total: $0.00</div>
+    <div id="payButtonContainer">
+        <button id="payButton">Pagar</button>
+    </div>
+    <div id="paymentConfirmation" style="display: none;">
+        <img src="./yape.jpeg" alt="Confirmación de Pago" id="confirmationImage" />
+        <button id="backToStreamButton" title="Volver">
+            <i class='bx bx-arrow-back' style='color:#000000'  ></i>        
+        </button>
+    </div>    
 </div>
 
 <script src="./main.js"></script>
@@ -77,8 +87,9 @@
         // Eliminar la cookie 'loggedIn'
         deleteCookie('loggedIn');
         // Redirigir a login.html
-        window.location.href = 'login.html';
+        window.location.href = 'demo.html';
     });
+    
 </script>
 
 </body>

@@ -3,7 +3,7 @@ $(document).ready(function () {
     let model;
     let currentStream = null;
     let selectedDeviceId = null;
-    const confidenceThreshold = 0.60;
+    const confidenceThreshold = 0.70;
     const font = "16px sans-serif"; // Define font here
 
     const publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1"; // Store securely in environment variables or backend
@@ -82,6 +82,48 @@ $(document).ready(function () {
             console.error("Error enumerating devices:", error);
         }
     };
+
+    let price = 0;
+    let isPaid = false; // Estado para saber si el precio está congelado
+
+    // Función para actualizar el precio dinámicamente
+    function updatePrice(newPrice) {
+        if (!isPaid) {
+            price = newPrice;
+            $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
+        }
+    }
+
+    async function showPaymentConfirmation() {
+        // Mostrar la imagen de confirmación de pago
+        $("#paymentConfirmation").show();
+        $("#backToStreamButton").show(); // Mostrar el botón "Volver"
+        isPaid = true; // Congelamos el precio al pagar
+    
+        // Aplicar el estilo para el precio fuerte
+        $("#totalPrice").addClass("frozen");
+    }
+    
+    async function hidePaymentConfirmation() {
+        $("#paymentConfirmation").hide();
+        $("#backToStreamButton").hide();
+        isPaid = false; // Reiniciamos el estado de pago
+        price = 0; // Reiniciamos el precio a cero
+        $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`); // Actualizamos el precio en la interfaz
+    
+        // Remover el estilo de precio fuerte
+        $("#totalPrice").removeClass("frozen");
+    }
+
+    // Evento para el botón "Pagar"
+    document.getElementById("payButton").addEventListener("click", async () => {
+        await showPaymentConfirmation();
+    });
+
+    // Evento para el botón "Volver"
+    document.getElementById("backToStreamButton").addEventListener("click", async () => {
+        await hidePaymentConfirmation();
+    });
 
     const loadModel = async () => {
         try {
@@ -209,7 +251,7 @@ $(document).ready(function () {
             }
         });
 
-        $("#totalPrice").text(`Precio Total: $${totalPrice.toFixed(2)}`);
+        updatePrice(totalPrice);
     };
 
     let prevTime;
