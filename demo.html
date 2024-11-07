@@ -54,6 +54,21 @@
             <option value="off">Camara Apagada</option>
         </select>
     </div>
+    <div class="product-list">
+        <h3>Productos</h3>
+        <ul>
+            <li>Halls Barra(25.2g)</li>
+            <li>Heineken(330ml)</li>
+            <li>Inca Kola(500ml)</li>
+            <li>Lays Clásicas(17gr)</li>
+            <li>Monster Verde(16fl)</li>
+            <li>Redbull(250ml)</li>
+            <li>Snickers(52gr)</li>
+            <li>Sprite(500ml)</li>
+            <li>Trident(8.5gr)</li>
+            <li>Pringles Rojo(104g)</li>
+        </ul>
+    </div>
 </div>
 
 <!-- Sidebar HTML -->
@@ -66,12 +81,13 @@
     <ul id="productList"></ul>
     <div id="totalPrice">Precio Total: $0.00</div>
     <div id="payButtonContainer">
-        <button id="payButton">Pagar</button>
+        <button id="payButton" disabled>Pagar</button>
     </div>
     <div id="paymentConfirmation" style="display: none;">
+        <p id="paymentTotal"></p> <!-- Elemento para mostrar el precio total -->
         <img src="./yape.jpeg" alt="Confirmación de Pago" id="confirmationImage" />
         <button id="backToStreamButton" title="Volver">
-            <i class='bx bx-arrow-back' style='color:#000000'  ></i>        
+            <i class='bx bx-arrow-back' style='color:#fff'  ></i>        
         </button>
     </div>    
 </div>

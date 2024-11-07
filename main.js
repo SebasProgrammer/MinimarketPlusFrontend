@@ -95,11 +95,14 @@ $(document).ready(function () {
     }
 
     async function showPaymentConfirmation() {
-        // Mostrar la imagen de confirmación de pago
+        // Actualiza el texto del precio total en el contenedor de confirmación de pago
+        $("#paymentTotal").text(`Pagar: $${price.toFixed(2)}`);
+        
+        // Mostrar la imagen de confirmación de pago y el botón "Volver"
         $("#paymentConfirmation").show();
-        $("#backToStreamButton").show(); // Mostrar el botón "Volver"
+        $("#backToStreamButton").show();
         isPaid = true; // Congelamos el precio al pagar
-    
+        
         // Aplicar el estilo para el precio fuerte
         $("#totalPrice").addClass("frozen");
     }
@@ -124,6 +127,27 @@ $(document).ready(function () {
     document.getElementById("backToStreamButton").addEventListener("click", async () => {
         await hidePaymentConfirmation();
     });
+
+    function updatePayButtonState(totalPrice) {
+        const payButton = document.getElementById("payButton");
+        if (totalPrice > 0) {
+            payButton.classList.remove("disabled");
+            payButton.disabled = false;
+        } else {
+            payButton.classList.add("disabled");
+            payButton.disabled = true;
+        }
+    }
+    
+    // Llama a esta función cada vez que actualices el precio total
+    function updatePrice(newPrice) {
+        if (!isPaid) {
+            price = newPrice;
+            $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
+            updatePayButtonState(price); // Verifica el estado del botón de pago
+        }
+    }
+
 
     const loadModel = async () => {
         try {
@@ -205,16 +229,16 @@ $(document).ready(function () {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         $("#productList").empty();
         let totalPrice = 0;
-
+    
         predictions.forEach((prediction) => {
             if (prediction.confidence >= confidenceThreshold) {
                 if (prediction.class.toLowerCase() === 'heineken' && isPast11PMInLima()) {
                     alert("Desde las 11 PM ya no se puede consumir bebidas alcohólicas.");
-                    return; // Skip this product
+                    return; // Omitir este producto
                 }
-
+    
                 const { x, y, width, height } = prediction.bbox;
-
+    
                 ctx.strokeStyle = prediction.color;
                 ctx.lineWidth = 4;
                 ctx.strokeRect(
@@ -223,7 +247,7 @@ $(document).ready(function () {
                     width / scale,
                     height / scale
                 );
-
+    
                 ctx.fillStyle = prediction.color;
                 const textWidth = ctx.measureText(prediction.class).width;
                 const textHeight = parseInt(font, 10);
@@ -233,13 +257,13 @@ $(document).ready(function () {
                     textWidth + 8,
                     textHeight + 4
                 );
-
+    
                 const price = getProductPrice(prediction.class);
                 if (price > 0) {
                     $("#productList").append(`<li>${prediction.class}: $${price.toFixed(2)}</li>`);
                     totalPrice += price;
                 }
-
+    
                 ctx.font = font;
                 ctx.textBaseline = "top";
                 ctx.fillStyle = "#000000";
@@ -250,9 +274,10 @@ $(document).ready(function () {
                 );
             }
         });
-
-        updatePrice(totalPrice);
+    
+        updatePrice(totalPrice); // Llama a la función de actualización del precio
     };
+    
 
     let prevTime;
     const pastFrameTimes = [];

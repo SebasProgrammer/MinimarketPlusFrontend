@@ -41,7 +41,7 @@ body:after {
     content: "";
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    right: 50px;
     width: 350px;
     height: 150px;
     z-index: 1;
@@ -124,6 +124,73 @@ body:after {
     font-size: medium;
 }
 
+/* Título de la lista de productos */
+.product-list {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #383838; /* Fondo gris oscuro */
+    border-radius: 8px;
+    border: 2px solid #444444; /* Borde más fuerte */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Efecto de hover en el contenedor de productos */
+.product-list:hover {
+    background-color: #444444; /* Se hace un poco más claro al pasar el mouse */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Título de la sección de productos */
+.product-list h3 {
+    font-size: 20px;
+    color: #f0f0f0;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-transform: uppercase; /* Letra en mayúsculas */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    border-bottom: 2px solid #5f6368;
+    padding-bottom: 10px;
+}
+
+/* Estilo para la lista */
+.product-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.product-list li {
+    font-size: 16px;
+    color: #dcdcdc;
+    padding: 12px 0;
+    border-bottom: 1px solid #555555;
+    transition: all 0.2s ease;
+}
+
+/* Último elemento sin borde */
+.product-list li:last-child {
+    border-bottom: none;
+}
+
+/* Efecto hover en los productos */
+.product-list li:hover {
+    background-color: #575757; /* Fondo más oscuro en hover */
+    color: #fff; /* Texto en blanco */
+    padding-left: 10px; /* Desplazar un poco hacia la izquierda */
+    font-weight: 600;
+}
+
+/* Estilo para el precio */
+.product-list .price {
+    font-weight: 500;
+    font-size: 15px;
+    color: #f4f4f4;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+
 /* Styling for the dropdown list */
 #cameraDropdown {
     width: 100%;
@@ -134,6 +201,11 @@ body:after {
     border-radius: 4px;
     font-size: 1em;
     text-align: center;
+}
+
+/* Sombra sutil para el sidebar */
+#leftSidebar {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Estilo general para el select */
@@ -216,19 +288,30 @@ body:after {
     text-align: center;
 }
 
+/* Estilo normal del botón */
 #payButton {
-    padding: 10px 20px;
-    font-size: 1em;
-    color: white;
-    background-color: #28a745;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 20px;
+    color: #ffffff;
+    background-color: #28a745; /* Verde intenso para el botón activo */
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-#payButton:hover {
-    background-color: #218838;
+/* Estilo cuando el botón está deshabilitado */
+#payButton.disabled {
+    background-color: #ccc; /* Color gris para el botón deshabilitado */
+    color: #777;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#payButton:not(.disabled):hover {
+    background-color: #218838; /* Color verde más oscuro al hacer hover */
+    transform: scale(1.05); /* Pequeña escala para un efecto de hover */
 }
 
 #paymentConfirmation {
@@ -251,23 +334,32 @@ body:after {
 }
 
 #backToStreamButton {
-    padding: 10px 20px;
     font-size: 16px;
-    color: white;
-    background-color: #ff4d4d;
-    border: none;
-    border-radius: 5px;
+    color: #3498db; /* Azul suave */
+    background-color: transparent;
+    border: 2px solid #3498db; /* Borde azul para resaltar el botón */
+    border-radius: 50%; /* Botón redondeado */
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s;
     position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 20;
+    top: 15px;
+    left: 15px;
+    transition: all 0.3s ease; /* Transición para un efecto suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra suave */
 }
 
-#bbackToStreamButton:hover {
-    background-color: #cc0000;
+#backToStreamButton:hover {
+    background-color: #3498db; /* Fondo azul al hacer hover */
+    color: #ffffff; /* Cambia el color del icono o texto a blanco */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más intensa al hacer hover */
+    transform: scale(1.05); /* Ligera ampliación al hacer hover */
 }
+
 
 #backToStreamButton i {
     font-size: 30px; /* Tamaño del ícono */
@@ -278,6 +370,19 @@ body:after {
     font-weight: bold; /* Hace el texto en negrita */
     color: #e60000; /* Cambia el color a un rojo más fuerte o puedes elegir el color que prefieras */
     font-size: 20px; /* Aumenta el tamaño de la fuente */
+}
+#paymentTotal {
+    font-size: 28px;              /* Tamaño más grande para destacar */
+    font-weight: 600;             /* Peso semi-negrita para un toque más moderno */
+    color: #2c3e50;               /* Color oscuro suave, elegante */
+    bottom: 60px;
+    padding: 10px 20px;           /* Espaciado interno para mejorar legibilidad */
+    background-color: #f8f9fa;    /* Fondo claro para resaltarlo */
+    border-radius: 8px;           /* Bordes redondeados */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+    border-left: 4px solid #3498db; /* Borde decorativo a la izquierda */
+    position: absolute;
+    z-index: 60;
 }
 
 /* Ajustes para pantallas pequeñas */
