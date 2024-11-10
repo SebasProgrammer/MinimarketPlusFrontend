@@ -16,37 +16,36 @@
     <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
     <link rel="stylesheet" href="./main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
 </head>
 
 <body class="loading">
-    <video id="video" autoplay muted playsinline></video>
-    <div id="fps"></div>
 
-    <div id="leftSidebar">
-        <h2>Cámaras Disponibles</h2>
-        <select id="cameraDropdown">
-            <!-- Opciones de las cámaras serán agregadas dinámicamente -->
-<script>
+<!-- <script>
     // Función para obtener una cookie por su nombre
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
+
     // Verificar si la cookie 'loggedIn' existe
     if (!getCookie('loggedIn')) {
         // Si la cookie no está presente, redirigir a login.html
         window.location.href = 'login.html';
     }
-</script>
+</script> -->
+
 <video id="video" autoplay muted playsinline></video>
 <div id="fps"></div>
+
 <div id="leftSidebar">
     <h2>Cámaras Disponibles</h2>
     <select id="cameraDropdown">
         <!-- Opciones de las cámaras serán agregadas dinámicamente -->
     </select>
     <br>
+
     <div class="select-container">
         <label for="cameraSelectBox">Seleccionar Camara</label>
         
@@ -54,28 +53,24 @@
             <option value="on" selected>Camara Prendida</option>
             <option value="off">Camara Apagada</option>
         </select>
-        <br>
-        <div class="select-container">
-            <label for="cameraSelectBox">Seleccionar Camara</label>
-            
-            <select id="cameraSelectBox">
-                <option value="on" selected>Camara Prendida</option>
-                <option value="off">Camara Apagada</option>
-            </select>
-        </div>
+    </div>
+    <div class="product-list">
+        <h3>Productos</h3>
+        <ul>
+            <li>Halls Barra(25.2g)</li>
+            <li>Heineken(330ml)</li>
+            <li>Inca Kola(500ml)</li>
+            <li>Lays Clásicas(17gr)</li>
+            <li>Monster Verde(16fl)</li>
+            <li>Redbull(250ml)</li>
+            <li>Snickers(52gr)</li>
+            <li>Sprite(500ml)</li>
+            <li>Trident(8.5gr)</li>
+            <li>Pringles Rojo(104g)</li>
+        </ul>
     </div>
 </div>
 
-    <!-- Sidebar HTML -->
-    <div id="rightSidebar">
-        <div id="logoutIcon" class="logout-icon">
-            <i class="fas fa-sign-out-alt"></i>
-        </div>
-        <br>
-        <h2>Productos Detectados</h2>
-        <ul id="productList"></ul>
-        <div id="totalPrice">Precio Total: $0.00</div>
-        <!-- Botón para cerrar sesión -->
 <!-- Sidebar HTML -->
 <div id="rightSidebar">
     <div id="logoutIcon" class="logout-icon">
@@ -85,20 +80,33 @@
     <h2>Productos Detectados</h2>
     <ul id="productList"></ul>
     <div id="totalPrice">Precio Total: $0.00</div>
+    <!-- <div id="payButtonContainer">
+        <button id="payButton" disabled>Pagar</button>
+    </div> -->
+    <!-- <div id="paymentConfirmation" style="display: none;">
+        <p id="paymentTotal"></p> 
+        <img src="./yape.jpeg" alt="Confirmación de Pago" id="confirmationImage" />
+        <button id="backToStreamButton" title="Volver">
+            <i class='bx bx-arrow-back' style='color:#fff'  ></i>        
+        </button>
+    </div>     -->
 </div>
+
 <script src="./main.js"></script>
-<script>
+
+<!-- <script>
     function deleteCookie(name) {
         document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     }
+
     document.getElementById('logoutIcon').addEventListener('click', function() {
         // Eliminar la cookie 'loggedIn'
         deleteCookie('loggedIn');
         // Redirigir a login.html
-        window.location.href = 'login.html';
+        window.location.href = 'demo.html';
     });
-</script>
+    
+</script> -->
 
-    <script src="./main.js"></script>
 </body>
 </html>
