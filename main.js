@@ -3,7 +3,8 @@ $(document).ready(function () {
     let model;
     let currentStream = null;
     let selectedDeviceId = null;
-    const confidenceThreshold = 0.70;
+    const confidenceThreshold = 0.50;
+    const confidenceThreshold = 0.60;
     const font = "16px sans-serif"; // Define font here
 
     const publishable_key = "rf_smbYDdLnlBMPgvuTzYQcWeysNtk1"; // Store securely in environment variables or backend
@@ -82,72 +83,6 @@ $(document).ready(function () {
             console.error("Error enumerating devices:", error);
         }
     };
-
-    let price = 0;
-    let isPaid = false; // Estado para saber si el precio está congelado
-
-    // Función para actualizar el precio dinámicamente
-    function updatePrice(newPrice) {
-        if (!isPaid) {
-            price = newPrice;
-            $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
-        }
-    }
-
-    async function showPaymentConfirmation() {
-        // Actualiza el texto del precio total en el contenedor de confirmación de pago
-        $("#paymentTotal").text(`Pagar: $${price.toFixed(2)}`);
-        
-        // Mostrar la imagen de confirmación de pago y el botón "Volver"
-        $("#paymentConfirmation").show();
-        $("#backToStreamButton").show();
-        isPaid = true; // Congelamos el precio al pagar
-        
-        // Aplicar el estilo para el precio fuerte
-        $("#totalPrice").addClass("frozen");
-    }
-    
-    async function hidePaymentConfirmation() {
-        $("#paymentConfirmation").hide();
-        $("#backToStreamButton").hide();
-        isPaid = false; // Reiniciamos el estado de pago
-        price = 0; // Reiniciamos el precio a cero
-        $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`); // Actualizamos el precio en la interfaz
-    
-        // Remover el estilo de precio fuerte
-        $("#totalPrice").removeClass("frozen");
-    }
-
-    // Evento para el botón "Pagar"
-    document.getElementById("payButton").addEventListener("click", async () => {
-        await showPaymentConfirmation();
-    });
-
-    // Evento para el botón "Volver"
-    document.getElementById("backToStreamButton").addEventListener("click", async () => {
-        await hidePaymentConfirmation();
-    });
-
-    function updatePayButtonState(totalPrice) {
-        const payButton = document.getElementById("payButton");
-        if (totalPrice > 0) {
-            payButton.classList.remove("disabled");
-            payButton.disabled = false;
-        } else {
-            payButton.classList.add("disabled");
-            payButton.disabled = true;
-        }
-    }
-    
-    // Llama a esta función cada vez que actualices el precio total
-    function updatePrice(newPrice) {
-        if (!isPaid) {
-            price = newPrice;
-            $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
-            updatePayButtonState(price); // Verifica el estado del botón de pago
-        }
-    }
-
 
     const loadModel = async () => {
         try {
@@ -229,16 +164,16 @@ $(document).ready(function () {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         $("#productList").empty();
         let totalPrice = 0;
-    
+
         predictions.forEach((prediction) => {
             if (prediction.confidence >= confidenceThreshold) {
                 if (prediction.class.toLowerCase() === 'heineken' && isPast11PMInLima()) {
                     alert("Desde las 11 PM ya no se puede consumir bebidas alcohólicas.");
-                    return; // Omitir este producto
+                    return; // Skip this product
                 }
-    
+
                 const { x, y, width, height } = prediction.bbox;
-    
+
                 ctx.strokeStyle = prediction.color;
                 ctx.lineWidth = 4;
                 ctx.strokeRect(
@@ -247,7 +182,7 @@ $(document).ready(function () {
                     width / scale,
                     height / scale
                 );
-    
+
                 ctx.fillStyle = prediction.color;
                 const textWidth = ctx.measureText(prediction.class).width;
                 const textHeight = parseInt(font, 10);
@@ -257,13 +192,13 @@ $(document).ready(function () {
                     textWidth + 8,
                     textHeight + 4
                 );
-    
+
                 const price = getProductPrice(prediction.class);
                 if (price > 0) {
                     $("#productList").append(`<li>${prediction.class}: $${price.toFixed(2)}</li>`);
                     totalPrice += price;
                 }
-    
+
                 ctx.font = font;
                 ctx.textBaseline = "top";
                 ctx.fillStyle = "#000000";
@@ -274,10 +209,9 @@ $(document).ready(function () {
                 );
             }
         });
-    
-        updatePrice(totalPrice); // Llama a la función de actualización del precio
+
+        $("#totalPrice").text(`Precio Total: $${totalPrice.toFixed(2)}`);
     };
-    
 
     let prevTime;
     const pastFrameTimes = [];
