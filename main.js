@@ -83,11 +83,12 @@ $(document).ready(function () {
         }
     };
 
-    //let price = 0;
+    let price = 0;
     // let isPaid = false; // Estado para saber si el precio está congelado
 
     // Función para actualizar el precio dinámicamente
     function updatePrice(newPrice) {
+        price = newPrice;
         $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
     }
 
