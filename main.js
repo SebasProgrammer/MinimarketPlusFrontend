@@ -83,50 +83,50 @@ $(document).ready(function () {
         }
     };
 
-    let price = 0;
-    let isPaid = false; // Estado para saber si el precio está congelado
+    // let price = 0;
+    // let isPaid = false; // Estado para saber si el precio está congelado
 
-    // Función para actualizar el precio dinámicamente
-    function updatePrice(newPrice) {
-        if (!isPaid) {
-            price = newPrice;
-            $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
-        }
-    }
+    // // Función para actualizar el precio dinámicamente
+    // function updatePrice(newPrice) {
+    //     if (!isPaid) {
+    //         price = newPrice;
+    //         $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
+    //     }
+    // }
 
-    async function showPaymentConfirmation() {
-        // Actualiza el texto del precio total en el contenedor de confirmación de pago
-        $("#paymentTotal").text(`Pagar: $${price.toFixed(2)}`);
+    // async function showPaymentConfirmation() {
+    //     // Actualiza el texto del precio total en el contenedor de confirmación de pago
+    //     $("#paymentTotal").text(`Pagar: $${price.toFixed(2)}`);
         
-        // Mostrar la imagen de confirmación de pago y el botón "Volver"
-        $("#paymentConfirmation").show();
-        $("#backToStreamButton").show();
-        isPaid = true; // Congelamos el precio al pagar
+    //     // Mostrar la imagen de confirmación de pago y el botón "Volver"
+    //     $("#paymentConfirmation").show();
+    //     $("#backToStreamButton").show();
+    //     isPaid = true; // Congelamos el precio al pagar
         
-        // Aplicar el estilo para el precio fuerte
-        $("#totalPrice").addClass("frozen");
-    }
+    //     // Aplicar el estilo para el precio fuerte
+    //     $("#totalPrice").addClass("frozen");
+    // }
     
-    async function hidePaymentConfirmation() {
-        $("#paymentConfirmation").hide();
-        $("#backToStreamButton").hide();
-        isPaid = false; // Reiniciamos el estado de pago
-        price = 0; // Reiniciamos el precio a cero
-        $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`); // Actualizamos el precio en la interfaz
+    // async function hidePaymentConfirmation() {
+    //     $("#paymentConfirmation").hide();
+    //     $("#backToStreamButton").hide();
+    //     isPaid = false; // Reiniciamos el estado de pago
+    //     price = 0; // Reiniciamos el precio a cero
+    //     $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`); // Actualizamos el precio en la interfaz
     
-        // Remover el estilo de precio fuerte
-        $("#totalPrice").removeClass("frozen");
-    }
+    //     // Remover el estilo de precio fuerte
+    //     $("#totalPrice").removeClass("frozen");
+    // }
 
-    // Evento para el botón "Pagar"
-    document.getElementById("payButton").addEventListener("click", async () => {
-        await showPaymentConfirmation();
-    });
+    // // Evento para el botón "Pagar"
+    // document.getElementById("payButton").addEventListener("click", async () => {
+    //     await showPaymentConfirmation();
+    // });
 
-    // Evento para el botón "Volver"
-    document.getElementById("backToStreamButton").addEventListener("click", async () => {
-        await hidePaymentConfirmation();
-    });
+    // // Evento para el botón "Volver"
+    // document.getElementById("backToStreamButton").addEventListener("click", async () => {
+    //     await hidePaymentConfirmation();
+    // });
 
     function updatePayButtonState(totalPrice) {
         const payButton = document.getElementById("payButton");
@@ -139,14 +139,14 @@ $(document).ready(function () {
         }
     }
     
-    // Llama a esta función cada vez que actualices el precio total
-    function updatePrice(newPrice) {
-        if (!isPaid) {
-            price = newPrice;
-            $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
-            updatePayButtonState(price); // Verifica el estado del botón de pago
-        }
-    }
+    // // Llama a esta función cada vez que actualices el precio total
+    // function updatePrice(newPrice) {
+    //     if (!isPaid) {
+    //         price = newPrice;
+    //         $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
+    //         updatePayButtonState(price); // Verifica el estado del botón de pago
+    //     }
+    // }
 
 
     const loadModel = async () => {
