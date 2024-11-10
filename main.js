@@ -83,16 +83,13 @@ $(document).ready(function () {
         }
     };
 
-    // let price = 0;
+    let price = 0;
     // let isPaid = false; // Estado para saber si el precio está congelado
 
-    // // Función para actualizar el precio dinámicamente
-    // function updatePrice(newPrice) {
-    //     if (!isPaid) {
-    //         price = newPrice;
-    //         $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
-    //     }
-    // }
+    // Función para actualizar el precio dinámicamente
+    function updatePrice(newPrice) {
+        $("#totalPrice").text(`Precio Total: $${price.toFixed(2)}`);
+    }
 
     // async function showPaymentConfirmation() {
     //     // Actualiza el texto del precio total en el contenedor de confirmación de pago
